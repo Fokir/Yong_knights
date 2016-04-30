@@ -1,0 +1,25 @@
+{
+  "name": "young_knights",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "sokol <sokol.fokir@gamail.com>"
+  ],
+  "license": "ISC",
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "pixi.js": "^3.0.11",
+    "Keypress": "^2.1.4",
+    "promise-polyfill": "^4.0.4",
+    "axios": "^0.11.0",
+    "stats.js": "*"
+  }
+}

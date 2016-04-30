@@ -1,0 +1,14 @@
+{
+  "name": "Rain",
+  "animations": {
+    "left": ["rain_left_1.png", "rain_left_2.png", "rain_left_3.png"],
+    "stay_left": ["rain_left_2.png"],
+    "right": ["rain_right_1.png", "rain_right_2.png", "rain_right_3.png"],
+    "stay_right": ["rain_right_2.png"],
+    "up": ["rain_up_1.png", "rain_up_2.png", "rain_up_3.png"],
+    "stay_up": ["rain_up_2.png"],
+    "down": ["rain_down_1.png", "rain_down_2.png", "rain_down_3.png"],
+    "stay_down": ["rain_down_2.png"],
+    "afraid": ["rain_afraid_1.png", "rain_afraid_2.png", "rain_afraid_3.png"]
+  }
+}
