@@ -25,9 +25,10 @@ var Draw = function () {
 
     Draw.width = size().w;
     Draw.height = size().h;
+    Draw.canvas = document.getElementById('game');
 
     var renderer = new PIXI.autoDetectRenderer(Draw.width, Draw.height, {
-        view: document.getElementById('game')
+        view: Draw.canvas
     });
     var amount = (renderer instanceof PIXI.WebGLRenderer) ? 100 : 5;
     if (amount == 5) {

@@ -2,6 +2,7 @@ var Physics = {
     _objects: [],
     debugContainer: new PIXI.Graphics(),
     _debug: false,
+    _world: null,
     debug: function (b) {
         this._debug = b;
         if (!b) {
@@ -10,28 +11,29 @@ var Physics = {
     },
     loop: function () {
         var self = this;
-        self._objects.forEach(function (item) {
-            self._objects.forEach(function (i) {
-                if (item.__hash__ != i.__hash__) {
-                    if (item.getActualRectangle().isCollision(i.getActualRectangle()) && !item.__static__) {
-                        var _item = item.getActualRectangle();
-                        var _i = i.getActualRectangle();
-                        if (_item.y + _item.h > _i.y) {
-                            item.cancelY();
+        self._objects.forEach(function (_item) {
+            self._objects.forEach(function (_i) {
+                if (_item.__hash__ != _i.__hash__) {
+                    if (_item.getActualRectangle().isCollision(_i.getActualRectangle()) && !_item.__static__) {
+                        var item = _item.getActualRectangle();
+                        var i = _i.getActualRectangle();
+
+                        if (item.y + item.h > i.y) {
+                            _item.cancelY();
                         }
-                        if (_item.x < _i.x + _i.w) {
-                            item.cancelX();
+                        if (item.x < i.x + i.w) {
+                            _item.cancelX();
                         }
-                        if (_item.y < _i.y + _i.h) {
-                            item.cancelY();
+                        if (item.y < i.y + i.h) {
+                            _item.cancelY();
                         }
-                        if(_item.x + _item.w > _i.x){
-                            item.cancelX();
+                        if (item.x + item.w > i.x) {
+                            _item.cancelX();
                         }
                     }
                 }
             });
-            item.loop();
+            _item.loop();
         });
 
         if (self._debug) {
@@ -53,6 +55,7 @@ var Physics = {
     addRectangle: function (x, y, w, h, _static) {
         this.add(new Rectangle(x, y, w, h), _static);
     },
+
     clear: function () {
         var save = [];
         this._objects.forEach(function (item) {
@@ -65,7 +68,20 @@ var Physics = {
 
     init: function (draw) {
         draw.add(this.debugContainer);
-        this.debugContainer.beginFill(0xC92121);
-        this.debugContainer.alpha = 0.4;
+        var gravity = new b2Vec2(0, 9.8);
+        this._world = new b2World(gravity, true);
+    },
+
+    step: function (dt) {
+        this.dtRemaining += dt;
+        while (this.dtRemaining > this.stepAmount) {
+            this.dtRemaining -= this.stepAmount;
+            this.world.Step(this.stepAmount,
+                8, // velocity iterations
+                3); // position iterations
+        }
+        if (this.debugDraw) {
+            this.world.DrawDebugData();
+        }
     }
 };
