@@ -30,6 +30,8 @@ var Draw = function () {
     var renderer = new PIXI.autoDetectRenderer(Draw.width, Draw.height, {
         view: Draw.canvas
     });
+    this.renderer = renderer;
+
     var amount = (renderer instanceof PIXI.WebGLRenderer) ? 100 : 5;
     if (amount == 5) {
         renderer.context.mozImageSmoothingEnabled = false;

@@ -43,7 +43,15 @@ var Dialog = {
             center();
             if(self.current == null){
                 container.renderable = false;
+                DisableControl.remove('w');
+                DisableControl.remove('s');
+                DisableControl.remove('d');
+                DisableControl.remove('a');
             } else{
+                DisableControl.add('w');
+                DisableControl.add('s');
+                DisableControl.add('d');
+                DisableControl.add('a');
                 container.renderable = true;
                 name.text = self.current.name + ': ';
                 text.text = self.current.text;

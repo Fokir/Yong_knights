@@ -12,11 +12,13 @@ var Keyboard = function (disable) {
                 keys: key,
                 on_keydown: function (e) {
                     e.preventDefault();
-                    self.keys[key] = true;
-                    if(self.events[key]){
-                        self.events[key].forEach(function (callback) {
-                            callback();
-                        });
+                    if(!DisableControl.is(key)){
+                        self.keys[key] = true;
+                        if(self.events[key]){
+                            self.events[key].forEach(function (callback) {
+                                callback();
+                            });
+                        }
                     }
                 },
                 on_keyup: function (e) {
@@ -37,4 +39,17 @@ var Keyboard = function (disable) {
         }
         this.events[key].push(callback);
     };
+};
+
+var DisableControl = {
+    list: {},
+    add: function (key) {
+        this.list[key] = true;
+    },
+    remove: function (key) {
+        this.list[key] = false;
+    },
+    is: function (key) {
+        return !!this.list[key];
+    }
 };

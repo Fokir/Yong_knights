@@ -3,7 +3,8 @@ var World = function (draw, main) {
     this.draw = draw;
     this.physics = new Physics(draw);
     this.Loader = new Load(this, main);
-    this.tileContainer = {};
+    this.tileContainer = null;
+    this.tileMap = null;
     this.objects = [];
     this.triggers = [];
     var empty = true;
@@ -32,32 +33,36 @@ var World = function (draw, main) {
         return rect;
     };
 
+    this.startTileGenerate = function () {
+        this.tileContainer = new PIXI.Container();
+    };
+
     this.addTile = function (name, texture, position) {
-        if (!this.tileContainer[name]) {
-            this.tileContainer[name] = new PIXI.ParticleContainer(40000, {}, 40000);
-            this.tileContainer[name].zIndex = -10000;
-            draw.add(this.tileContainer[name]);
-            draw.updateZIndex();
-        }
         var sprite = draw.sprite(texture);
         sprite.position.x = position.x;
         sprite.position.y = position.y;
-        this.tileContainer[name].zIndex = -1000 * 1000;
-        draw.add(sprite, this.tileContainer[name]);
+        draw.add(sprite, this.tileContainer);
+    };
+
+    this.endTileGenerate = function (width, height) {
+        var renderTexture = new PIXI.RenderTexture(draw.renderer, width, height);
+        renderTexture.render(this.tileContainer);
+        this.tileMap = new PIXI.Sprite(renderTexture);
+        draw.add(this.tileMap);
     };
 
     this.loop = function (timestamp, delta) {
         this.physics.loop(timestamp, delta);
         this.triggers.forEach(function (trigger) {
-            if(main.player.entity.rectangle.getActualRectangle().isCollision(trigger)){
-                if(trigger.enable && !trigger.complite){
-                    if(trigger.trigger){
+            if (main.player.entity.rectangle.getActualRectangle().isCollision(trigger)) {
+                if (trigger.enable && !trigger.complite) {
+                    if (trigger.trigger) {
                         trigger.trigger.call();
                     }
                 }
                 trigger.complite = true;
-            } else{
-                if(trigger.complite && trigger.trigger && trigger.trigger.out){
+            } else {
+                if (trigger.complite && trigger.trigger && trigger.trigger.out) {
                     trigger.trigger.out();
                 }
                 trigger.complite = false;
@@ -66,10 +71,11 @@ var World = function (draw, main) {
     };
 
     this.clearWorld = function () {
-        if(!empty) {
-            for (var key in this.tileContainer) {
-                draw.remove(this.tileContainer[key]);
-                delete this.tileContainer[key];
+        if (!empty) {
+            if(this.tileMap){
+                draw.remove(this.tileMap);
+                this.tileContainer = null;
+                this.tileMap = null;
             }
             world.physics.clear();
             world.triggers = [];

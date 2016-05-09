@@ -95,6 +95,7 @@ var Load = function (world, main) {
     this.generateTile = function (tiles) {
         var x = 0;
         var y = 0;
+        world.startTileGenerate();
         tiles.data.forEach(function (tile) {
             if (tile != 0) {
                 world.addTile(tile, cache[tile], {
@@ -107,6 +108,7 @@ var Load = function (world, main) {
                 y++;
                 x = 0;
             }
-        })
+        });
+        world.endTileGenerate(tiles.width * self.tilewidth, tiles.height * self.tileheight);
     };
 };
