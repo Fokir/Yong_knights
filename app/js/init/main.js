@@ -3,25 +3,22 @@ function Main() {
     var lastTimestamp = 0;
 
     var stats = new Stats();
-    stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+    stats.showPanel(0);
     document.body.appendChild(stats.dom);
 
-    this.player = new Player(draw, 'rain');
     this.world = new World(draw, this);
+    this.player = new Player(draw, this.world, 'rain');
+    this.interface = new Interface(draw);
+
+    Dialog.init(this.world, draw, this);
 
     var loop = function (timestamp) {
         stats.begin();
-
         var delta = 1 / (1000 / (timestamp - lastTimestamp));
         lastTimestamp = timestamp;
-
         Looper.loop(timestamp - lastTimestamp, delta);
-        Physics.loop(timestamp - lastTimestamp, delta);
-
         draw.draw(delta);
-
         stats.end();
-
         requestAnimationFrame(loop);
     };
 
@@ -41,7 +38,7 @@ var Looper = {
         this.count++;
     }
 };
-
+var main;
 window.onload = function () {
-    new Main();
+    main = new Main();
 };

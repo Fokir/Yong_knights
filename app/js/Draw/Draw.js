@@ -37,14 +37,23 @@ var Draw = function () {
     }
 
     document.body.appendChild(renderer.view);
+    var needUpdateZIndex = false;
     world.updateLayersOrder = function () {
-        world.children.sort(function (a, b) {
-            a.zIndex = a.zIndex || 0;
-            b.zIndex = b.zIndex || 0;
-            return a.zIndex - b.zIndex
-        });
+        if (needUpdateZIndex) {
+            world.children.sort(function (a, b) {
+                a.zIndex = a.zIndex || 0;
+                b.zIndex = b.zIndex || 0;
+                return a.zIndex - b.zIndex
+            });
+            needUpdateZIndex = false;
+        }
     };
 
+    this.updateZIndex = function () {
+        needUpdateZIndex = true;
+    };
+
+    var performance = new Performance();
     this.draw = function () {
         world.updateLayersOrder();
         renderer.render(global);
@@ -78,5 +87,4 @@ var Draw = function () {
     };
 
     this.preloader = new Preloader(this);
-    Physics.init(this);
 };

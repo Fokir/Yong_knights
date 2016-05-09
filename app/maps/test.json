@@ -39,48 +39,99 @@
                  "y":0
                 }, 
                 {
-                 "height":4,
-                 "id":10,
-                 "name":"wall",
-                 "rotation":0,
-                 "type":"wall",
-                 "visible":true,
-                 "width":278.667,
-                 "x":0,
-                 "y":405
-                }, 
-                {
-                 "height":4,
-                 "id":11,
-                 "name":"wall",
-                 "rotation":0,
-                 "type":"wall",
-                 "visible":true,
-                 "width":253,
-                 "x":388,
-                 "y":405
-                }, 
-                {
-                 "height":64,
+                 "height":50,
                  "id":13,
-                 "name":"wall",
+                 "name":"lvl_select",
+                 "properties":
+                    {
+                     "spawn":"spawn_1",
+                     "url":"test_lvl"
+                    },
+                 "propertytypes":
+                    {
+                     "spawn":"string",
+                     "url":"string"
+                    },
+                 "rotation":0,
+                 "type":"lvl",
+                 "visible":true,
+                 "width":50,
+                 "x":295,
+                 "y":103
+                }, 
+                {
+                 "gid":198,
+                 "height":250,
+                 "id":20,
+                 "name":"house",
+                 "rotation":0,
+                 "type":"decoration",
+                 "visible":true,
+                 "width":216,
+                 "x":410,
+                 "y":160
+                }, 
+                {
+                 "height":44,
+                 "id":24,
+                 "name":"dialog",
+                 "properties":
+                    {
+                     "name":"empty_house"
+                    },
+                 "propertytypes":
+                    {
+                     "name":"string"
+                    },
+                 "rotation":0,
+                 "type":"dialog",
+                 "visible":true,
+                 "width":37.3333,
+                 "x":498.667,
+                 "y":125
+                }, 
+                {
+                 "height":160,
+                 "id":31,
+                 "name":"house_wall",
                  "rotation":0,
                  "type":"wall",
                  "visible":true,
-                 "width":59,
-                 "x":290,
-                 "y":96
+                 "width":200,
+                 "x":420,
+                 "y":1
+                }, 
+                {
+                 "height":50,
+                 "id":32,
+                 "name":"lvl_select_2",
+                 "properties":
+                    {
+                     "spawn":"spawn_2",
+                     "url":"test_lvl"
+                    },
+                 "propertytypes":
+                    {
+                     "spawn":"string",
+                     "url":"string"
+                    },
+                 "rotation":0,
+                 "type":"lvl",
+                 "visible":true,
+                 "width":50,
+                 "x":-58.3333333333333,
+                 "y":588.333333333333
                 }],
          "offsetx":0,
          "offsety":-1,
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "width":0,
          "x":0,
          "y":0
         }],
- "nextobjectid":14,
+ "nextobjectid":33,
  "orientation":"orthogonal",
  "properties":
     {
@@ -893,6 +944,23 @@
                 }
             },
          "tilewidth":32
+        }, 
+        {
+         "columns":0,
+         "firstgid":198,
+         "margin":0,
+         "name":"tower",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":250,
+         "tiles":
+            {
+             "0":
+                {
+                 "image":"decoration\/home_1.png"
+                }
+            },
+         "tilewidth":216
         }],
  "tilewidth":32,
  "version":1,

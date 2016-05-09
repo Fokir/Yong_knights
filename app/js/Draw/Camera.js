@@ -27,10 +27,14 @@ var Camera = function (world) {
     this.move = function (x, y, delta) {
         this.container.position.x -= x * delta;
         this.container.position.y -= y * delta;
+        this.container.position.x = Math.round(this.container.position.x);
+        this.container.position.y = Math.round(this.container.position.y);
     };
 
     this.center = function (x, y, width, height) {
         this.container.position.x = x * -1 + (window.innerWidth / 2) - (width / 2);
         this.container.position.y = y * -1 + (window.innerHeight / 2) - (height / 2);
+        this.container.position.x = Math.round(this.container.position.x);
+        this.container.position.y = Math.round(this.container.position.y);
     };
 };

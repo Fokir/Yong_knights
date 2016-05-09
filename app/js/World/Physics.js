@@ -1,87 +1,66 @@
-var Physics = {
-    _objects: [],
-    debugContainer: new PIXI.Graphics(),
-    _debug: false,
-    _world: null,
-    debug: function (b) {
-        this._debug = b;
-        if (!b) {
-            this.debugContainer.clear();
-        }
-    },
-    loop: function () {
-        var self = this;
-        self._objects.forEach(function (_item) {
-            self._objects.forEach(function (_i) {
-                if (_item.__hash__ != _i.__hash__) {
-                    if (_item.getActualRectangle().isCollision(_i.getActualRectangle()) && !_item.__static__) {
-                        var item = _item.getActualRectangle();
-                        var i = _i.getActualRectangle();
+var Physics = function (draw) {
+    var Engine = Matter.Engine;
+    var engine = Engine.create();
+    engine.world.gravity.y = 0;
+    this.engine = engine;
 
-                        if (item.y + item.h > i.y) {
-                            _item.cancelY();
-                        }
-                        if (item.x < i.x + i.w) {
-                            _item.cancelX();
-                        }
-                        if (item.y < i.y + i.h) {
-                            _item.cancelY();
-                        }
-                        if (item.x + item.w > i.x) {
-                            _item.cancelX();
-                        }
-                    }
-                }
-            });
-            _item.loop();
-        });
+    this._debug = new PIXI.Graphics();
+    this._debug.zIndex = 1000000;
+    draw.add(this._debug);
+    draw.updateZIndex();
+    this.debug = false;
+    window.Physics = this;
 
-        if (self._debug) {
-            self.debugContainer.clear();
-            this.debugContainer.beginFill(0xC92121);
-            this.debugContainer.alpha = 0.4;
-            self._objects.forEach(function (item) {
-                item = item.getActualRectangle();
-                self.debugContainer.drawRect(item.x, item.y, item.w, item.h);
-            });
-        }
-    },
-    add: function (rec, _static) {
-        rec.__hash__ = Math.random();
-        rec.__static__ = _static;
-        this._objects.push(rec);
-    },
-
-    addRectangle: function (x, y, w, h, _static) {
-        this.add(new Rectangle(x, y, w, h), _static);
-    },
-
-    clear: function () {
-        var save = [];
-        this._objects.forEach(function (item) {
-            if (item.__permanent__) {
-                save.push(item);
-            }
-        });
-        this._objects = save;
-    },
-
-    init: function (draw) {
-        draw.add(this.debugContainer);
-        var gravity = new b2Vec2(0, 9.8);
-        this._world = new b2World(gravity, true);
-    },
-
-    step: function (dt) {
-        this.dtRemaining += dt;
-        while (this.dtRemaining > this.stepAmount) {
-            this.dtRemaining -= this.stepAmount;
-            this.world.Step(this.stepAmount,
-                8, // velocity iterations
-                3); // position iterations
-        }
-        if (this.debugDraw) {
-            this.world.DrawDebugData();
-        }
-    }
+    this.list = [];
 };
+
+Physics.prototype.clear = function () {
+    var self = this;
+    this.list.forEach(function (obj) {
+        Matter.Composite.remove(self.engine.world, obj);
+    });
+    this.list = [];
+};
+
+Physics.prototype.add = function (sprite, x, y, w, h, isStatic, noRemove) {
+    var Bodies = Matter.Bodies,
+        World = Matter.World;
+
+    x += w / 2;
+    y += h / 2;
+
+    var obj = Bodies.rectangle(x, y, w, h, {isStatic: !!isStatic});
+    obj.sprite = sprite;
+    World.add(this.engine.world, [obj]);
+    if(!noRemove){
+        this.list.push(obj);
+    }
+    return obj;
+};
+
+Physics.prototype.loop = function (timestamp, delta) {
+    var Engine = Matter.Engine;
+    Engine.update(this.engine, 1000 / 60);
+    var self = this;
+    this._debug.clear();
+    this._debug.beginFill(0xFFFFFF);
+    this._debug.alpha = 0.3;
+    var Composite = Matter.Composite;
+    var bodies = Composite.allBodies(this.engine.world);
+    bodies.forEach(function (body) {
+        if (body.sprite) {
+            body.sprite.position = body.position;
+        }
+
+        if (self.debug) {
+            var vertices = body.vertices;
+            self._debug.moveTo(vertices[0].x, vertices[0].y);
+            for (var j = 1; j < vertices.length; j += 1) {
+                self._debug.lineTo(vertices[j].x, vertices[j].y);
+            }
+
+            self._debug.lineTo(vertices[0].x, vertices[0].y);
+        }
+    });
+};
+

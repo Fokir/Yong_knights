@@ -17,9 +17,8 @@ var Load = function (world, main) {
     this.parse = function (json) {
         self.tilewidth = json.tilewidth;
         self.tileheight = json.tileheight;
-        self.spawnPoint = null;
-        if(json.properties){
-            self.spawnPoint = json.properties.spawn || null;
+        if(json.properties && json.properties.spawn && !Stack.isSpawn()){
+            Stack.spawn = json.properties.spawn;
         }
         self.loadTextures(json.tilesets, function () {
             world.draw.preloader.hide();
@@ -47,9 +46,11 @@ var Load = function (world, main) {
             collection.forEach(function (col) {
                 var key;
                 for (key in col.tiles) {
+                    var write_key = parseInt(key);
+                    write_key  += col.firstgid;
                     var item = col.tiles[key];
                     var path = '/sprites/' + item.image;
-                    cache[key] = loader.resources[path].texture;
+                    cache[write_key] = loader.resources[path].texture;
                 }
             });
             callback();
@@ -63,15 +64,28 @@ var Load = function (world, main) {
             if (layer.type == 'tilelayer') {
                 self.generateTile(layer);
             } else if(layer.type == 'objectgroup'){
+                var spawn = Stack.spawn;
+                var rectangle;
                 layer.objects.forEach(function (obj) {
                     if(obj.type == 'spawn'){
-                        if(self.spawnPoint == obj.name){
-                            var rect = new Rectangle(obj.x, obj.y, obj.width, obj.height);
-                            main.player.entity.position.x = rect.centerPoint().x - Config.player.width / 2;
-                            main.player.entity.position.y = rect.centerPoint().y - Config.player.height;
+                        var rect = new Rectangle(obj.x, obj.y, obj.width, obj.height);
+                        if(spawn == obj.name){
+                            main.player.entity.setPosition(rect.centerPoint().x, rect.centerPoint().y);
                         }
                     } else if(obj.type == 'wall'){
-                        Physics.add(new Rectangle(obj.x, obj.y, obj.width, obj.height), true);
+                        world.physics.add(null, obj.x, obj.y, obj.width, obj.height, true);
+                    } else if(obj.type == 'lvl'){
+                        rectangle = world.addTrigger(obj.x, obj.y, obj.width, obj.height);
+                        rectangle.trigger = new levelSelect(obj.properties.url, obj.properties.spawn)
+                    } else if(obj.type == 'dialog'){
+                        rectangle = world.addTrigger(obj.x, obj.y, obj.width, obj.height);
+                        rectangle.trigger = new dialogPrepare(obj.properties.name);
+                    } else if(obj.type == 'decoration'){
+                        var decoration = world.getSprite(cache[obj.gid], obj.x, obj.y - obj.height);
+                        decoration.width = obj.width;
+                        decoration.height = obj.height;
+                        world.addObject(decoration);
+                        console.log(obj);
                     }
                 });
             }
@@ -83,7 +97,7 @@ var Load = function (world, main) {
         var y = 0;
         tiles.data.forEach(function (tile) {
             if (tile != 0) {
-                world.addTile(tile, cache[tile - 1], {
+                world.addTile(tile, cache[tile], {
                     x: x * self.tilewidth,
                     y: y * self.tileheight
                 });

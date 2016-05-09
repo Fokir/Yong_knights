@@ -26,6 +26,36 @@
                  "width":32,
                  "x":256.25,
                  "y":224.25
+                }, 
+                {
+                 "height":62,
+                 "id":6,
+                 "name":"lvl_select",
+                 "properties":
+                    {
+                     "url":"test"
+                    },
+                 "propertytypes":
+                    {
+                     "url":"string"
+                    },
+                 "rotation":0,
+                 "type":"lvl",
+                 "visible":true,
+                 "width":60,
+                 "x":320,
+                 "y":288
+                }, 
+                {
+                 "height":58,
+                 "id":7,
+                 "name":"spawn_2",
+                 "rotation":0,
+                 "type":"spawn",
+                 "visible":true,
+                 "width":60,
+                 "x":2,
+                 "y":578
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -34,7 +64,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":5,
+ "nextobjectid":8,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tileheight":32,

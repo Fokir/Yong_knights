@@ -5,5 +5,8 @@ var Stack = {
     },
     set spawn(value){
         this._spawn.push(value);
+    },
+    isSpawn: function () {
+        return this._spawn.length > 0;
     }
 };

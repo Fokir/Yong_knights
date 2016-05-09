@@ -1,16 +1,27 @@
-var Player = function (draw, name, nick, behavior) {
-    this.entity = new Entity(draw);
-    this.entity.position.__permanent__ = true;
-    this.entity.position.w = Config.player.width;
-    this.entity.position.h = Config.player.height;
+var Player = function (draw, world, name, nick, behavior) {
+    this.entity = new Entity(draw, world);
+    this.entity.rectangle.w = Config.player.width;
+    this.entity.rectangle.h = Config.player.height;
 
     //Настройки для расчета столкновений
-    var widthCollision = 16;
+    var widthCollision = 20;
     var heightCollision = 15;
-    this.entity.position.collisionOffset.h = heightCollision;
-    this.entity.position.collisionOffset.y = Config.player.height - heightCollision;
-    this.entity.position.collisionOffset.w = Config.player.width - widthCollision;
-    this.entity.position.collisionOffset.x = widthCollision / 2;
+    this.entity.rectangle.collisionOffset.h = heightCollision;
+    this.entity.rectangle.collisionOffset.y = Config.player.height - heightCollision;
+    this.entity.rectangle.collisionOffset.w = Config.player.width - widthCollision;
+    this.entity.rectangle.collisionOffset.x = widthCollision / 2;
+
+    this.entity.updateSprite = function (sprite, body, rectangle) {
+        if(sprite){
+            rectangle.setActualX(body.position.x - this.rectangle.collisionOffset.w/2);
+            rectangle.setActualY(body.position.y - this.rectangle.collisionOffset.h/2);
+        }
+    };
+
+    this.initBody = function () {
+        this.entity.addBody(this.entity.rectangle.collisionOffset.w, this.entity.rectangle.collisionOffset.h, false, true);
+    };
+    this.initBody();
 
     var player = this;
     Looper.add(this);
@@ -36,6 +47,10 @@ var Player = function (draw, name, nick, behavior) {
 
     var animation = 'stay_down';
     this.loop = function (timestamp, delta) {
+        if(this.entity.body){
+            this.entity.rectangle.x = this.entity.body.position.x;
+            this.entity.rectangle.y = this.entity.body.position.y;
+        }
         if(control.is('w')){
             this.entity.move(0, Config.player.speed, delta);
             animation = 'up'
@@ -67,7 +82,7 @@ var Player = function (draw, name, nick, behavior) {
             animation = 'stay_down'
         }
 
-        draw.camera(this.entity.position.x, this.entity.position.y, Config.player.width, Config.player.height);
+        draw.camera(this.entity.rectangle.x, this.entity.rectangle.y, Config.player.width, Config.player.height);
 
         player.entity.playAnimation(animation);
         this.entity.loop(timestamp, delta);

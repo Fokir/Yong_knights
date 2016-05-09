@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" nextobjectid="14">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" nextobjectid="33">
  <properties>
   <property name="spawn" value="spawn_1"/>
  </properties>
@@ -596,6 +596,11 @@
    <image width="32" height="32" source="../../../../rpg/crop/tile_outside/outside_192.png"/>
   </tile>
  </tileset>
+ <tileset firstgid="198" name="tower" tilewidth="216" tileheight="250" tilecount="1" columns="0">
+  <tile id="0">
+   <image width="216" height="250" source="../../../../rpg/crop/decoration/home_1.png"/>
+  </tile>
+ </tileset>
  <layer name="tiles" width="20" height="20">
   <data encoding="csv">
 72,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,73,
@@ -620,11 +625,27 @@
 6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6
 </data>
  </layer>
- <objectgroup name="objects" visible="0" offsetx="0" offsety="-1">
+ <objectgroup name="objects" offsetx="0" offsety="-1">
   <object id="3" name="spawn_1" type="spawn" x="302" y="526" width="33" height="34"/>
   <object id="6" name="wall" type="wall" x="-4" y="0" width="4" height="640"/>
-  <object id="10" name="wall" type="wall" x="0" y="405" width="278.667" height="4"/>
-  <object id="11" name="wall" type="wall" x="388" y="405" width="253" height="4"/>
-  <object id="13" name="wall" type="wall" x="290" y="96" width="59" height="64"/>
+  <object id="13" name="lvl_select" type="lvl" x="295" y="103" width="50" height="50">
+   <properties>
+    <property name="spawn" value="spawn_1"/>
+    <property name="url" value="test_lvl"/>
+   </properties>
+  </object>
+  <object id="20" name="house" type="decoration" gid="198" x="410" y="160" width="216" height="250"/>
+  <object id="24" name="dialog" type="dialog" x="498.667" y="125" width="37.3333" height="44">
+   <properties>
+    <property name="name" value="empty_house"/>
+   </properties>
+  </object>
+  <object id="31" name="house_wall" type="wall" x="420" y="1" width="200" height="160"/>
+  <object id="32" name="lvl_select_2" type="lvl" x="-58.3333" y="588.333" width="50" height="50">
+   <properties>
+    <property name="spawn" value="spawn_2"/>
+    <property name="url" value="test_lvl"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

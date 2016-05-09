@@ -4,22 +4,6 @@ var Rectangle = function (x, y, w, h) {
     this.x = x;
     this.y = y;
 
-    var lastX = x;
-    var lastY = y;
-
-    this.loop = function () {
-        lastX = this.x;
-        lastY = this.y;
-    };
-    
-    this.cancelX = function () {
-        this.x = lastX;
-    };
-
-    this.cancelY = function () {
-        this.y = lastY;
-    };
-
     this.collisionOffset = {
         x: 0,
         y: 0,
